@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 import appSoft.project.model.Customer;
+import appSoft.project.model.User;
 import appSoft.project.model.service.VehicleService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
@@ -20,8 +22,10 @@ public class MainController {
 		return "login";
 	}
 	@GetMapping("/home")
-	private String getHome(Model model) {
+	private String getHome(Model model,HttpSession session) {
 		model.addAttribute("vList",vehicleService.getAllVehicle());
+		User u = (User) session.getAttribute("validuser");
+//		model.addAttribute("userId",u.getId());
 		return "homepage";
 	}
 

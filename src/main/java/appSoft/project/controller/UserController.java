@@ -49,7 +49,12 @@ public class UserController {
 		if (u != null) {
 			model.addAttribute("signUpMessage", "*email already exists!!!");
 			return "registration";
-		} else {
+		} 
+		else if(!user.getPassword().equals(user.getConfirmPassword()) ) {
+			model.addAttribute("passwordMismatch", "*password mismatch!!!");
+			return "registration";
+		}
+		else {
 			userService.addUser(user);
 			return "login";
 		}

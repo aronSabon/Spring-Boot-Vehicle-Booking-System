@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import appSoft.project.model.Booking;
 import appSoft.project.model.Customer;
+import appSoft.project.model.User;
 import appSoft.project.model.Vehicle;
 import appSoft.project.model.repository.VehicleRepository;
 import appSoft.project.model.service.BookingService;
 import appSoft.project.model.service.CustomerService;
 import appSoft.project.model.service.VehicleService;
+import appSoft.project.utils.MailUtils;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CustomerController {
+	@Autowired
+	private MailUtils mailUtils;
 	@Autowired
 	private VehicleService vehicleService;
 	@Autowired
@@ -33,11 +37,13 @@ public class CustomerController {
 	private VehicleRepository vehicleRepository;
 	@GetMapping("/bookingForm")
 	private String getBooking(@RequestParam int vId,Model model,HttpSession  session) {
+		User u =(User)session.getAttribute("validuser");
 		if(session.getAttribute("validuser")==null) {
 			return "/login";
 		}
 		else {
 		model.addAttribute("vModel", vehicleService.getVehicleById(vId));
+		model.addAttribute("email",u.getEmail() );
 		return "booking";
 		}
 	}
@@ -56,11 +62,14 @@ public class CustomerController {
 		booking.setCustomerName(customer.getFirstName()+" "+ customer.getLastName());
 		booking.setVehicleName(customer.getVehicle().get(0).getName());
 		bookingService.addBooking(booking);
+		mailUtils.sendEmail(customer.getEmail(), "Booking", "Your Booking has been accepted.");
 		customerService.deleteCustomerById(vId);
 		return "redirect:/admin";
 	}
 	@GetMapping("/rejectBooking")
 	private String rejectBooking(@RequestParam int vId) {
+		Customer customer = customerService.getCustomerById(vId);
+		mailUtils.sendEmail(customer.getEmail(), "Booking", "Sorry! Your booking has been rejected.");
 		customerService.deleteCustomerById(vId);
 		return "redirect:/admin";
 	}

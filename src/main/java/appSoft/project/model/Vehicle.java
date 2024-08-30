@@ -11,10 +11,10 @@ import lombok.Data;
 public class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String name;
-	private String type;
-	private String licenseNo;
-	private double price;
-	private String status;
+	public int id;
+	public String name;
+	public String type;
+	public String licenseNo;
+	public double price;
+	public String status;
 }

@@ -42,4 +42,10 @@ CustomerRepository customerRepository;
 		customerRepository.save(customer);
 	}
 
+	@Override
+	public List<Customer> getByEmail(String email) {
+		// TODO Auto-generated method stub
+		return customerRepository.findByEmail(email);
+	}
+
 }

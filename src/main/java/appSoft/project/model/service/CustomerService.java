@@ -10,4 +10,6 @@ public interface CustomerService {
 	void deleteCustomerById(int id);
 	Customer getCustomerById(int id);
 	void updateCustomer(Customer customer);
+	List<Customer>getByEmail(String email);
+
 }
